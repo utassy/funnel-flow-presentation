@@ -4237,7 +4237,6 @@
         lead.textContent = tr("introLead");
         renderIntroBody();
         next.textContent = isHopper() ? tr("introNextHopper") : tr("introNextFlat");
-        document.getElementById("explain-dialog").scrollTop = 0;
         return;
       }
 
@@ -4328,8 +4327,13 @@
     function openExplain(payload) {
       explainPayload = payload;
       renderExplain();
-      document.getElementById("explain-modal").hidden = false;
-      document.getElementById("explain-ok").focus();
+      const modal = document.getElementById("explain-modal");
+      const dialog = document.getElementById("explain-dialog");
+      modal.hidden = false;
+      dialog.scrollTop = 0;
+      // Focus without scrolling the long intro to the bottom "Értem" button.
+      document.getElementById("explain-ok").focus({ preventScroll: true });
+      requestAnimationFrame(() => { dialog.scrollTop = 0; });
     }
     function closeExplain() {
       explainPayload = null;
